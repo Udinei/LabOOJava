@@ -1,6 +1,6 @@
 # LabOO Java
 
-Olá! Este é o projeto de prática do LabOO Java da DIO. 
+Olá! Este é um projeto de prática do LabOO Java da DIO. Nesse projeto foram exercitados os conceitos e principios da UML e POO.
 
 ## Desafios implementados:
 - Cadastrar Livro
