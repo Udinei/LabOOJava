@@ -1,6 +1,7 @@
 package one.digitalinovation.laboojava.negocio;
 
 import one.digitalinovation.laboojava.basedados.Banco;
+import one.digitalinovation.laboojava.entidade.Pedido;
 import one.digitalinovation.laboojava.entidade.Produto;
 
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class ProdutoNegocio {
 
     /**
      * Salva um novo produto(livro ou caderno) na loja.
+     * Gera um novo codigo para o
      * @param novoProduto Livro ou caderno que pode ser vendido
      */
     public void salvar(Produto novoProduto) {
@@ -49,12 +51,29 @@ public class ProdutoNegocio {
         }
     }
 
+
+
     /**
      * Exclui um produto pelo código de cadastro.
      * @param codigo Código de cadastro do produto
      */
     public void excluir(String codigo) {
-        //TODO Implementar a exclusão
+        int produtoExclusao = -1;
+        for (int i = 0; i < bancoDados.getProdutos().length; i++) {
+
+            Produto produto = bancoDados.getProdutos()[i];
+            if (produto.getCodigo().equals(codigo)) {
+                produtoExclusao = i;
+                break;
+            }
+        }
+
+        if (produtoExclusao != -1) {
+            bancoDados.removerProduto(produtoExclusao);
+            System.out.println("Produto excluído com sucesso.");
+        } else {
+            System.out.println("Produto inexistente.");
+        }
     }
 
     /**

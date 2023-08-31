@@ -2,9 +2,7 @@ package one.digitalinovation.laboojava.console;
 
 import one.digitalinovation.laboojava.basedados.Banco;
 import one.digitalinovation.laboojava.entidade.*;
-import one.digitalinovation.laboojava.negocio.ClienteNegocio;
-import one.digitalinovation.laboojava.negocio.PedidoNegocio;
-import one.digitalinovation.laboojava.negocio.ProdutoNegocio;
+import one.digitalinovation.laboojava.negocio.*;
 import one.digitalinovation.laboojava.utilidade.LeitoraDados;
 
 import java.util.Optional;
@@ -22,6 +20,10 @@ public class Start {
     private static ClienteNegocio clienteNegocio = new ClienteNegocio(banco);
     private static PedidoNegocio pedidoNegocio = new PedidoNegocio(banco);
     private static ProdutoNegocio produtoNegocio = new ProdutoNegocio(banco);
+
+    private static LivroNegocio livroNegocio = new LivroNegocio(banco);
+
+    private static CadernoNegocio cadernoNegocio = new CadernoNegocio(banco);
 
     /**
      * Método utilitário para inicializar a aplicação.
@@ -48,35 +50,45 @@ public class Start {
             System.out.println("Selecione uma opção:");
             System.out.println("1 - Cadastrar Livro");
             System.out.println("2 - Excluir Livro");
-            //TODO Desafio: Consultar Livro(nome)
             System.out.println("3 - Cadastrar Caderno");
             System.out.println("4 - Excluir Caderno");
-            //TODO Desafio: Consultar Caderno(matéria)
             System.out.println("5 - Fazer pedido");
             System.out.println("6 - Excluir pedido");
-            //TODO Desafio: Consultar Pedido(código)
             System.out.println("7 - Listar produtos");
             System.out.println("8 - Listar pedidos");
             System.out.println("9 - Deslogar");
             System.out.println("10 - Sair");
+            System.out.println("11 - Cadastrar Cliente");
+            System.out.println("12 - Listar Cliente");
+            System.out.println("13 - Excluir Cliente");
+            System.out.println("14 - Consultar Livro");
+            System.out.println("15 - Consultar Caderno");
+            System.out.println("16 - Consultar Pedido");
 
             opcao = LeitoraDados.lerDado();
 
             switch (opcao) {
                 case "1":
+                    // cadastrar livro
                     Livro livro = LeitoraDados.lerLivro();
                     produtoNegocio.salvar(livro);
                     break;
                 case "2":
+                    // excluir livro
                     System.out.println("Digite o código do livro");
                     String codigoLivro = LeitoraDados.lerDado();
                     produtoNegocio.excluir(codigoLivro);
                     break;
                 case "3":
-                    //TODO Cadastrar Caderno
+                    // cadastrar caderno
+                    Caderno caderno = LeitoraDados.lerCaderno();
+                    produtoNegocio.salvar(caderno);
+
                     break;
                 case "4":
-                    //TODO Excluir Caderno
+                    System.out.println("Digite o código do caderno");
+                    String codigoCaderno = LeitoraDados.lerDado();
+                    produtoNegocio.excluir(codigoCaderno);
                     break;
                 case "5":
                     Pedido pedido = LeitoraDados.lerPedido(banco);
@@ -97,7 +109,8 @@ public class Start {
                     produtoNegocio.listarTodos();
                     break;
                 case "8":
-                    //TODO Listar todos os Pedidos
+                    // Listar todos os Pedidos
+                    pedidoNegocio.listarTodos();
                     break;
                 case "9":
                     System.out.println(String.format("Volte sempre %s!", clienteLogado.getNome()));
@@ -106,6 +119,37 @@ public class Start {
                 case "10":
                     System.out.println("Aplicação encerrada.");
                     System.exit(0);
+                    break;
+                case "11":
+                    Cliente cliente = LeitoraDados.lerCliente();
+                    clienteNegocio.salvar(cliente);
+                    break;
+                case "12":
+                    clienteNegocio.listarTodos();
+                    break;
+                case "13":
+                    System.out.println("Digite o cpf do cliente para exclusão");
+                    String cpf = LeitoraDados.lerDado();
+                    clienteNegocio.excluir(cpf);
+                    clienteNegocio.listarTodos();
+                    break;
+                case "14":
+                    System.out.println("Digite o nome do livro: ");
+                    String nome = LeitoraDados.lerDado();
+                    Optional<Livro> livroConsulta = livroNegocio.consultar(nome);
+                    System.out.printf("Codigo: "+ livroConsulta.get().getCodigo() +" Livro: " + livroConsulta.get().getNome() +" Genero: " + livroConsulta.get().getGenero());
+                    break;
+                case "15":
+                    System.out.println("Digite o a materia do caderno");
+                    String materia = LeitoraDados.lerDado();
+                    Optional<Caderno> cadernoConsulta = cadernoNegocio.consultar(materia);
+                    System.out.printf("Codigo: "+ cadernoConsulta.get().getCodigo() +" Tipo: " + cadernoConsulta.get().getTipo() +" Preço: " + cadernoConsulta.get().getPreco());
+                    break;
+                case "16":
+                    System.out.println("Digite o codigo do pedido");
+                    String codigo = LeitoraDados.lerDado();
+                    Optional<Pedido> pedidoConsultar = pedidoNegocio.consultar(codigo);
+                    System.out.printf("Codigo: "+ pedidoConsultar.get().getCodigo() +" Tipo: " + pedidoConsultar.get().getCliente() +" Preço: " + pedidoConsultar.get().getTotal());
                     break;
                 default:
                     System.out.println("Opção inválida.");
